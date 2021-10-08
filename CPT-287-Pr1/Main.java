@@ -74,9 +74,11 @@ public class Main {
                 			+		   "7) Save Changes \r\n"
                 			+		   "8) Exit \r\n");
                 	try {
+                		//make sure user input is a number
                     	String userInp = var.nextLine();
                     	int number = Integer.parseInt(userInp);
                     	
+                    	//display showing movies
                     	if (number == 1) {
                     		Iterator sit = showingList.iterator();
                     		while (sit.hasNext()) {
@@ -84,16 +86,20 @@ public class Main {
                     		}
                     	}
                     	
+                    	//display coming movies
                     	if (number == 2) {
-                    		Iterator cit = showingList.iterator();
+                    		Iterator cit = comingList.iterator();
                     		while (cit.hasNext()) {
                     			System.out.println(cit.next().toString());
                     		}
                     	}
                     	
+                    	//add a movie
+                    	//TODO: add input validation, check and make sure a movie/release date doesn't already exist
+                    	//TODO: probably need to sort the list as movies are put in it
                     	if (number == 3) {
-                    		System.out.println(showingList.size());
-                    		System.out.println(comingList.size());
+                    		//System.out.println(showingList.size());
+                    		//System.out.println(comingList.size());
                     		System.out.println("Please enter the movie title: \r\n");
                     		String userMovie = var.nextLine();
                     		System.out.println("Please enter the movie release date: \r\n");
@@ -105,6 +111,8 @@ public class Main {
                     		System.out.println("Please enter the movie status, released or received: \r\n");
                     		String userStatus = var.nextLine();
                     		
+                    		//create new movie object with user input and add it to a class based on its date
+                    		//is the date if after today, it goes into coming list, if date is before today, showing list
                     		Movie bMovie = new Movie(userMovie, new SimpleDateFormat("MM/dd/yyyy").parse(userRelDate), userDescription, new SimpleDateFormat("MM/dd/yyyy").parse(userRecDate), userStatus);
                             if (bMovie.releaseDate.after(getDate())) {
                                 comingList.addFirst(bMovie);
@@ -112,12 +120,15 @@ public class Main {
                             else {
                                 showingList.addFirst(bMovie);
                             }
-                    		System.out.println(showingList.size());
-                    		System.out.println(comingList.size());
+                    		//System.out.println(showingList.size());
+                    		//System.out.println(comingList.size());
                     		
                     	}
                     	
+                    	//edit release date of movie
+                    	//TODO: finish this item
                     	if (number == 4) {
+                    		
                     		System.out.println("Please type 1 to edit Showing Movies and 2 to edit Coming Movies: \r\n");
                     		String fourinp = var.nextLine();
                         	int number2 = Integer.parseInt(fourinp);
@@ -128,32 +139,41 @@ public class Main {
                         		int select = Integer.parseInt(selection);
                         		Iterator sit = showingList.iterator();
                         		Movie result = null;
-                        		for (int i = 0; i < select; i++) {
+                        		
+                        		//couldn't get this to work, needs to iterate over the list until it hits the selection, then edit the selection
+                        		//selection edit should be something like result.setReleaseDate(new SimpleDateFormat("MM/dd/yyyy).parse(user input))
+                        		//TODO: add a line to accept user input to set the date. That...should probably go before the line before this
+                        		
+                        		/*for (int i = 0; i < select; i++) {
                         			if (!sit.hasNext()) {
                         				result = null;
                         				break;
                         			}
                         			result = (Movie).sit.next();
-                        		}
+                        		}*/
                         	}
                     		
                     	}
                     	
+                    	//TODO:Edit movie description, use setDescription(String) method of Movie
                     	if (number == 5) {
                     		System.out.println("Please type 1 to edit Showing Movies and 2 to edit Coming Movies: \r\n");
                     		
                     	}
                     	
+                    	//TODO: display all movies after MM/dd/yyyy date
                     	if (number == 6) {
                     		System.out.println("Please enter a date: \r\n");
                     		
                     	}
                     	
+                    	//TODO: don't really have to do anything since the lists are saved as they are edited?
                     	if (number == 7) {
                     		System.out.println("All changes are saved automatically. Thank you. \r\n");
                     		
                     	}
                     	
+                    	//exit program
                     	if (number == 8) {
                     		menuKeeper = 2;
                     	}
@@ -187,7 +207,7 @@ public class Main {
 		
 
 	}
-	
+	//function to get today's date
 	public static Date getDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyy");
 		Date date = new Date();
@@ -195,3 +215,4 @@ public class Main {
 	}
 
 }
+
