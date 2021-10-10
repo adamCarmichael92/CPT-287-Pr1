@@ -29,11 +29,11 @@ public class Main {
             	  Release/Receive Status*/
             	
             	//the below path will likely need to be changed, this points to where it is looking for the file
-                reader = new BufferedReader(new FileReader("E:/downloads/project1.txt"));
+                reader = new BufferedReader(new FileReader("input.txt"));
                 
                 //create a doubly-linked list to store the movies
-                Linked_List showingList = new Linked_List();
-                Linked_List comingList = new Linked_List();
+                Linked_List<Movie> showingList = new Linked_List<Movie>();
+                Linked_List<Movie> comingList = new Linked_List<Movie>();
                 
                 //loop to read over text file
                 while (true) {
@@ -84,6 +84,8 @@ public class Main {
                     		while (sit.hasNext()) {
                     			System.out.println(sit.next().toString());
                     		}
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
                     	//display coming movies
@@ -92,85 +94,177 @@ public class Main {
                     		while (cit.hasNext()) {
                     			System.out.println(cit.next().toString());
                     		}
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
-                    	//add a movie
-                    	//TODO: add input validation, check and make sure a movie/release date doesn't already exist
+                    	//add a movie (Adam, Lindsey, and Evan)
+                    	
                     	//TODO: probably need to sort the list as movies are put in it
                     	if (number == 3) {
                     		//System.out.println(showingList.size());
                     		//System.out.println(comingList.size());
                     		System.out.println("Please enter the movie title: \r\n");
                     		String userMovie = var.nextLine();
+                    		//Checks to see if movie already exists in the coming list (Adam Carmichael)
+                    		Iterator<Movie> cit = comingList.iterator();
+                    		while (cit.hasNext()) {
+                    			Movie temp = cit.next();
+                    			if (userMovie.equalsIgnoreCase(temp.getName())) {
+                    				System.out.println("Movie already exists in list.\n");
+                    				System.out.println("Enter new movie title: ");
+                    				userMovie = var.nextLine();	
+                    			}
+                    		}
+                    		
                     		System.out.println("Please enter the movie release date: \r\n");
                     		String userRelDate = var.nextLine();
+                    		//Handles invalid inputs from user and prompts them to enter again (Adam Carmichael)
+                       		while (validateDate(userRelDate) == false) {
+                				System.out.println("Invalid input, try again.\n");
+                				System.out.println("Enter new Date (\"MM/dd/yyyy\"): ");
+                				userRelDate = var.nextLine();
+                			}
                     		System.out.println("Please enter the movie description: \r\n");
                     		String userDescription = var.nextLine();
                     		System.out.println("Please enter the receive date: \r\n");
                     		String userRecDate = var.nextLine();
+                    		//Handles invalid inputs from user and prompts them to enter again (Adam Carmichael)
+                       		while (validateDate(userRecDate) == false) {
+                				System.out.println("Invalid input, try again.\n");
+                				System.out.println("Enter new Date (\"MM/dd/yyyy\"): ");
+                				userRecDate = var.nextLine();
+                			}
                     		System.out.println("Please enter the movie status, released or received: \r\n");
                     		String userStatus = var.nextLine();
                     		
+                    		//Lindsey Erwin
                     		//create new movie object with user input and add it to a class based on its date
                     		//is the date if after today, it goes into coming list, if date is before today, showing list
                     		Movie bMovie = new Movie(userMovie, new SimpleDateFormat("MM/dd/yyyy").parse(userRelDate), userDescription, new SimpleDateFormat("MM/dd/yyyy").parse(userRecDate), userStatus);
-                            if (bMovie.releaseDate.after(getDate())) {
-                                comingList.addFirst(bMovie);
-                            }
-                            else {
-                                showingList.addFirst(bMovie);
-                            }
-                    		//System.out.println(showingList.size());
-                    		//System.out.println(comingList.size());
+                    		//Check that release date is after receive date
+                    		if (bMovie.receiveDate.after(new SimpleDateFormat("MM/dd/yyyy").parse(userRelDate))) {
+                    			System.out.println("Invalid entry, receive date must be before release date\n");
+                    			System.out.println("Please make another entry.\n");
+                    		}
+                    		//Check that dates are formatted correctly
+                    		if (validateDate(userRecDate) == false || validateDate(userRelDate) == false) {
+                    			System.out.println("Invalid date format\n");
+                    		}
                     		
+                    		else {
+                    			if (bMovie.releaseDate.after(getDate())) {
+                    				comingList.addFirst(bMovie);
+                    			}
+                    			else {
+                    				showingList.addFirst(bMovie);
+                    			}
+                    			//System.out.println(showingList.size());
+                    			//System.out.println(comingList.size());
+                    		}
+                    		
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
-                    	//edit release date of movie
-                    	//TODO: finish this item
+                    	//edit release date of movie (Adam Carmichael)
                     	if (number == 4) {
                     		
-                    		System.out.println("Please type 1 to edit Showing Movies and 2 to edit Coming Movies: \r\n");
-                    		String fourinp = var.nextLine();
-                        	int number2 = Integer.parseInt(fourinp);
-                        	
-                        	if (number2 == 1) {
-                        		System.out.println("Please select which movie you would like to edit. The first movie listed is 1. /r/n");
-                        		String selection = var.nextLine();
-                        		int select = Integer.parseInt(selection);
-                        		Iterator sit = showingList.iterator();
-                        		Movie result = null;
-                        		
-                        		//couldn't get this to work, needs to iterate over the list until it hits the selection, then edit the selection
-                        		//selection edit should be something like result.setReleaseDate(new SimpleDateFormat("MM/dd/yyyy).parse(user input))
-                        		//TODO: add a line to accept user input to set the date. That...should probably go before the line before this
-                        		
-                        		/*for (int i = 0; i < select; i++) {
-                        			if (!sit.hasNext()) {
-                        				result = null;
-                        				break;
-                        			}
-                        			result = (Movie).sit.next();
-                        		}*/
-                        	}
+                    		printMovieList(comingList);
+                    		//Prompt user to choose a movie by name
+                    		System.out.println("Please select movie name from the above list to edit: \r\n");
+                    		String movName = var.nextLine();
+                    		//method to find movie by name
+                    		Movie movie = findMovieByName(movName, comingList);
+                    		if (movie != null) {
+                    			//prompt user to enter new date
+                    			System.out.println("Enter new Date (\"MM/dd/yyyy\"): ");
+                    			String date = var.nextLine();
+                    			//Handles invalid inputs from user and prompts them to enter again
+                           		while (validateDate(date) == false) {
+                    				System.out.println("Invalid input, try again.\n");
+                    				System.out.println("Enter new Date (\"MM/dd/yyyy\"): ");
+                        			date = var.nextLine();
+                    			}
+                           		Date userDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+                    			//Set new date
+                    			movie.setReleaseDate(userDate);
+                    			//acknowledge edit and print list
+                    			System.out.println("Movie has been edited. \n");
+                    			printMovieList(comingList);
+                    		} else {
+                    			System.out.println("Movie not found in list.");
+                    		}
                     		
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
+                    		
+                    		
                     	
-                    	//TODO:Edit movie description, use setDescription(String) method of Movie
+                    	//Adam Carmichael
+                    	//Edits the description of a movie in the "coming" list
                     	if (number == 5) {
-                    		System.out.println("Please type 1 to edit Showing Movies and 2 to edit Coming Movies: \r\n");
+                    		printMovieList(comingList);
+                    		//Prompt user to choose a movie by name
+                    		System.out.println("Please select movie name from the above list to edit: \r\n");
+                    		String movName = var.nextLine();
+                    		//method to find movie by name
+                    		Movie movie = findMovieByName(movName, comingList);
+                    		if (movie != null) {
+                    			//prompt user to enter new description
+                    			System.out.println("Enter new description: ");
+                    			String movDesc = var.nextLine();
+                    			//Set new description
+                    			movie.setDescription(movDesc);
+                    			//acknowledge edit and print list
+                    			System.out.println("Movie has been edited. \n");
+                    			printMovieList(comingList);
+                    		} else {
+                    			System.out.println("Movie not found in list.");
+                    		}
                     		
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
-                    	//TODO: display all movies after MM/dd/yyyy date
-                    	if (number == 6) {
-                    		System.out.println("Please enter a date: \r\n");
-                    		
-                    	}
+                    //Lindsey Erwin	
+                   	 //Display all movies before MM/dd/yyyy date
+                   	if (number == 6) {
+                   		// Get date from user input and convert to type Date
+                   		System.out.println("Please enter a date: \r\n");
+                   		String date = var.nextLine();
+                   		Date userDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+                   		//Handles invalid inputs from user and prompts them to enter again
+                   		while (validateDate(date) == false) {
+            				System.out.println("Invalid input, try again.\n");
+            				System.out.println("Enter new Date (\"MM/dd/yyyy\"): ");
+                			date = var.nextLine();
+            			}
+                   		
+                   		Iterator<Movie> cit = comingList.iterator();
+                   		//Counts number of coming films with release date before give date
+                   		int count = 0;
+
+                       	while (cit.hasNext()) {
+                       		Movie temp = cit.next();
+                       		if (temp.releaseDate.before(userDate)) {
+                       			System.out.println(temp.toString());
+                       			count++;
+                       		}
+                       	}
+                       	System.out.println("Number of coming films before "+ userDate + ": "+ count);
+                       	
+                       	System.out.println("Hit enter to continue.");
+                		var.nextLine();
+                   	}
                     	
                     	//TODO: don't really have to do anything since the lists are saved as they are edited?
                     	if (number == 7) {
                     		System.out.println("All changes are saved automatically. Thank you. \r\n");
                     		
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
                     	//exit program
@@ -207,12 +301,63 @@ public class Main {
 		
 
 	}
+	//Adam Carmichael
+	/**
+	 * finds movie object by name
+	 * @param movieName: Name of the movie to be found in list
+	 * @param movieList: Either the coming or showing list
+	 * @return: Movie object
+	 */
+	private static Movie findMovieByName(String movieName, Linked_List<Movie> movieList) {
+		List_Iterator<Movie> cit = movieList.iterator();
+		Movie movie = null;
+		while (cit.hasNext()) {
+			Movie temp = cit.next();
+			if (movieName.equalsIgnoreCase(temp.getName())) {
+				movie = temp;	
+			}
+		}
+		return movie;
+	}
+	
+	//Evan Colyer
 	//function to get today's date
 	public static Date getDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyy");
 		Date date = new Date();
 		return date;
 	}
+	//Adam Carmichael
+	/**
+	 * Prints either movie list
+	 * @param movieList: Either the coming or showing list
+	 */
+	public static void printMovieList(Linked_List<Movie> movieList) {
+		List_Iterator<Movie> cit = movieList.iterator();
+		while (cit.hasNext()) {
+			System.out.println(cit.next().toString());
+		}
+	}
+	
+	//Lindsey Erwin
+	//function to check if date input is valid
+		public static boolean validateDate(String userDate) {
+			
+			    SimpleDateFormat sdfrmt = new SimpleDateFormat("MM/dd/yyyy");
+			    sdfrmt.setLenient(false);
+			
+			    try
+			    {
+			        sdfrmt.parse(userDate); 
+			    }
+			    // Date format is invalid 
+			    catch (ParseException e)
+			    {
+			        return false;
+			    }
+			    // Return true if date format is valid 
+			    return true;
+				}
 
 }
 
