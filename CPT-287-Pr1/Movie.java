@@ -21,6 +21,15 @@ public class Movie {
 	     rStatus = movstatus;
 
 	  }
+	//Adam Carmichael
+	  // Getters
+	  public String getName() { return name; }
+	  public Date getReleaseDate() { return releaseDate; }
+	  public String getDescription() { return description; }
+	  public Date getReceivedDate() { return receiveDate; }
+	  public String getRStatus() { return rStatus; }
+	
+	
 	  
 	  //set all our setters
 	  public void setName(String mName) {
