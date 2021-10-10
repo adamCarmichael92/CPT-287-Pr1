@@ -32,8 +32,8 @@ public class Main {
                 reader = new BufferedReader(new FileReader("E:/downloads/project1.txt"));
                 
                 //create a doubly-linked list to store the movies
-                Linked_List showingList = new Linked_List();
-                Linked_List comingList = new Linked_List();
+                Linked_List<Movie> showingList = new Linked_List<Movie>();
+                Linked_List<Movie> comingList = new Linked_List<Movie>();
                 
                 //loop to read over text file
                 while (true) {
@@ -84,6 +84,8 @@ public class Main {
                     		while (sit.hasNext()) {
                     			System.out.println(sit.next().toString());
                     		}
+				System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
                     	//display coming movies
@@ -92,6 +94,8 @@ public class Main {
                     		while (cit.hasNext()) {
                     			System.out.println(cit.next().toString());
                     		}
+				System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
                     	//add a movie
@@ -155,10 +159,30 @@ public class Main {
                     		
                     	}
                     	
-                    	//TODO:Edit movie description, use setDescription(String) method of Movie
+                    	//Adam Carmichael
+                    	//Edits the description of a movie in the "coming" list
                     	if (number == 5) {
-                    		System.out.println("Please type 1 to edit Showing Movies and 2 to edit Coming Movies: \r\n");
+                    		printMovieList(comingList);
+                    		//Prompt user to choose a movie by name
+                    		System.out.println("Please select movie name from the above list to edit: \r\n");
+                    		String movName = var.nextLine();
+                    		//method to find movie by name
+                    		Movie movie = findMovieByName(movName, comingList);
+                    		if (movie != null) {
+                    			//prompt user to enter new description
+                    			System.out.println("Enter new description: ");
+                    			String movDesc = var.nextLine();
+                    			//Set new description
+                    			movie.setDescription(movDesc);
+                    			//acknowledge edit and print list
+                    			System.out.println("Movie has been edited. \n");
+                    			printMovieList(comingList);
+                    		} else {
+                    			System.out.println("Movie not found in list.");
+                    		}
                     		
+                    		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
                     	}
                     	
                     	//TODO: display all movies after MM/dd/yyyy date
@@ -212,6 +236,35 @@ public class Main {
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyy");
 		Date date = new Date();
 		return date;
+	}
+	//Adam Carmichael
+	/**
+	 * finds movie object by name
+	 * @param movieName: Name of the movie to be found in list
+	 * @param movieList: Either the coming or showing list
+	 * @return: Movie object
+	 */
+	private static Movie findMovieByName(String movieName, Linked_List<Movie> movieList) {
+		List_Iterator<Movie> cit = movieList.iterator();
+		Movie movie = null;
+		while (cit.hasNext()) {
+			Movie temp = cit.next();
+			if (movieName.equalsIgnoreCase(temp.getName())) {
+				movie = temp;	
+			}
+		}
+		return movie;
+	}
+	//Adam Carmichael
+	/**
+	 * Prints either movie list
+	 * @param movieList: Either the coming or showing list
+	 */
+	public static void printMovieList(Linked_List<Movie> movieList) {
+		List_Iterator<Movie> cit = movieList.iterator();
+		while (cit.hasNext()) {
+			System.out.println(cit.next().toString());
+		}
 	}
 
 }
