@@ -102,8 +102,7 @@ public class Main {
                     	
                     	//TODO: probably need to sort the list as movies are put in it
                     	if (number == 3) {
-                    		//System.out.println(showingList.size());
-                    		//System.out.println(comingList.size());
+                    		
                     		System.out.println("Please enter the movie title: \r\n");
                     		String userMovie = var.nextLine();
                     		//Checks to see if movie already exists in the coming list (Adam Carmichael)
@@ -113,6 +112,7 @@ public class Main {
                     			if (userMovie.equalsIgnoreCase(temp.getName())) {
                     				System.out.println("Movie already exists in list.\n");
                     				System.out.println("Enter new movie title: ");
+						cit.reset();
                     				userMovie = var.nextLine();	
                     			}
                     		}
@@ -142,25 +142,23 @@ public class Main {
                     		//create new movie object with user input and add it to a class based on its date
                     		//is the date if after today, it goes into coming list, if date is before today, showing list
                     		Movie bMovie = new Movie(userMovie, new SimpleDateFormat("MM/dd/yyyy").parse(userRelDate), userDescription, new SimpleDateFormat("MM/dd/yyyy").parse(userRecDate), userStatus);
+                    		
                     		//Check that release date is after receive date
                     		if (bMovie.receiveDate.after(new SimpleDateFormat("MM/dd/yyyy").parse(userRelDate))) {
                     			System.out.println("Invalid entry, receive date must be before release date\n");
                     			System.out.println("Please make another entry.\n");
-                    		}
-                    		//Check that dates are formatted correctly
-                    		if (validateDate(userRecDate) == false || validateDate(userRelDate) == false) {
-                    			System.out.println("Invalid date format\n");
-                    		}
-                    		
-                    		else {
+                    			bMovie = null;
+                    		} else {
                     			if (bMovie.releaseDate.after(getDate())) {
                     				comingList.addFirst(bMovie);
+                    				System.out.println("Movie has been added to Coming List.\n");
+                    				
                     			}
                     			else {
                     				showingList.addFirst(bMovie);
+                    				System.out.println("Movie has been added to Showing List.\n");
                     			}
-                    			//System.out.println(showingList.size());
-                    			//System.out.println(comingList.size());
+                    			
                     		}
                     		
                     		System.out.println("Hit enter to continue.");
