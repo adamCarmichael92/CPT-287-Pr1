@@ -72,7 +72,8 @@ public class Main {
                 			+		   "5) Edit Movie Description \r\n"
                 			+		   "6) Show Movies Before a Date \r\n"
                 			+		   "7) Save Changes \r\n"
-                			+		   "8) Exit \r\n");
+                			+		   "8) Move Coming Movie to Showing Movie \r\n"
+                			+		   "9) Exit \r\n");
                 	try {
                 		//make sure user input is a number
                     	String userInp = var.nextLine();
@@ -265,8 +266,29 @@ public class Main {
                     		var.nextLine();
                     	}
                     	
-                    	//exit program
+			//Adam Carmichael
+                    	//Moves a coming movie to the showing movie list when given a release date
                     	if (number == 8) {
+                    		
+                    		// Get date from user input and convert to type Date
+                       		System.out.println("Please enter a release date: \r\n");
+                       		String date = var.nextLine();
+                       		Date userDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+                       		
+                       		//Handles invalid inputs from user and prompts them to enter again
+                       		while (validateDate(date) == false) {
+                				System.out.println("Invalid input, try again.\n");
+                				System.out.println("Enter new Date (\"MM/dd/yyyy\"): ");
+                    			date = var.nextLine();
+                			}
+                       		moveMovieToShowing(userDate, comingList, showingList);
+                       		
+                       		System.out.println("Hit enter to continue.");
+                    		var.nextLine();
+                    		
+                    	}
+                    	//exit program
+                    	if (number == 9) {
                     		menuKeeper = 2;
                     	}
                 	}
@@ -317,6 +339,36 @@ public class Main {
 		}
 		return movie;
 	}
+	
+	//Adam Carmichael
+		/**
+		 * finds movie object by release date and removes it and adds to the showing list
+		 * @param movieRelDate: Release date of the movie to be found in list
+		 * @param comingList: coming list to search for release dates
+		 * @param showingList: showing list to add movies to
+		 */
+		private static void moveMovieToShowing(Date movieRelDate, Linked_List<Movie> comingList, Linked_List<Movie> showingList) {
+			List_Iterator<Movie> cit = comingList.iterator();
+			List_Iterator<Movie> sit = showingList.iterator();
+			//This loop checks to see if the coming list has release dates that match what the user entered
+			while (cit.hasNext()) {
+				Movie temp = cit.next();
+				if (movieRelDate.toString().equals(temp.getReleaseDate().toString())) {
+					temp = cit.removePrevious();
+					//This loop checks showing list to see if that movie title is already showing
+					while (sit.hasNext()) {
+						Movie p = sit.next();
+						if (temp.getName().equalsIgnoreCase(p.getName())) {
+							break;
+						} else {
+							sit.reset();
+							sit.add(temp);
+							break;
+						}
+					}
+				} 
+			}
+		}
 	
 	//Evan Colyer
 	//function to get today's date
