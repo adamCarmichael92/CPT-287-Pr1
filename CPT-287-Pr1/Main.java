@@ -356,16 +356,15 @@ public class Main {
 				if (movieRelDate.toString().equals(temp.getReleaseDate().toString())) {
 					temp = cit.removePrevious();
 					//This loop checks showing list to see if that movie title is already showing
+					Movie p = sit.next();
 					while (sit.hasNext()) {
-						Movie p = sit.next();
 						if (temp.getName().equalsIgnoreCase(p.getName())) {
 							break;
 						} else {
-							sit.reset();
-							sit.add(temp);
-							break;
+							p = sit.next();
 						}
 					}
+					sit.add(temp);
 				} 
 			}
 		}
